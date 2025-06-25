@@ -5,8 +5,6 @@ namespace Application.DTOs
 {
     public class UpdateUsuarioDTO
     {
-        public int Id { get; set; }
-
         [EmailAddress]
         public string? Email { get; set; }
 
