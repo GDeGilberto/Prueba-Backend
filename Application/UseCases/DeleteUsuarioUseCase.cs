@@ -26,6 +26,7 @@ namespace Application.UseCases
                 EstatusEnum.Inactivo,
                 usuario.Sexo
             );
+            usuarioInactivo.SetId(usuarioId);
 
             await _repository.UpdateAsync(usuarioInactivo);
         }
