@@ -21,7 +21,7 @@ namespace Application.UseCases
 
             var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)
-                throw new KeyNotFoundException($"Usuario with ID {id} not found");
+                throw new KeyNotFoundException($"Usuario con ID {id} no encontrado");
 
             var validationContext = new ValidationContext(usuarioDTO);
             Validator.ValidateObject(usuarioDTO, validationContext, true);

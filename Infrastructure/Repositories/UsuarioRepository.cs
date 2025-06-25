@@ -73,7 +73,7 @@ namespace Infrastructure.Repositories
         {
             var usuario = await _db.Usuarios.FindAsync(entity.Id);
             if (usuario == null)
-                throw new KeyNotFoundException($"Usuario with ID {entity.Id} not found");
+                throw new KeyNotFoundException($"Usuario con ID {entity.Id} no encontrado");
 
             usuario.Email = entity.Email;
             usuario.NombreUsuario = entity.NombreUsuario;

@@ -17,7 +17,7 @@ namespace Application.UseCases
         {
             var usuario = await _repository.GetByIdAsync(usuarioId);
             if (usuario == null)
-                throw new KeyNotFoundException($"Usuario with ID {usuarioId} not found");
+                throw new KeyNotFoundException($"Usuario con ID {usuarioId} no encontrado");
 
             var usuarioInactivo = new Usuario(
                 usuario.Email,
