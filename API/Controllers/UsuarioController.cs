@@ -3,6 +3,7 @@ using Application.DTOs;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -14,20 +15,24 @@ namespace API.Controllers
         private readonly GetUsuarioUseCase<Usuario, UsuarioResponseDTO> _getUsuarioUseCase;
         private readonly UpdateUsuarioUseCase _updateUsuarioUseCase;
         private readonly DeleteUsuarioUseCase _deleteUsuarioUseCase;
+        private readonly LoginUseCase _loginUseCase;
 
         public UsuarioController(
             AddUsuarioUseCase<AddUsuarioRequestDTO> addUsuarioUseCase,
             GetUsuarioUseCase<Usuario, UsuarioResponseDTO> getUsuarioUseCase,
             UpdateUsuarioUseCase updateUsuarioUseCase,
-            DeleteUsuarioUseCase deleteUsuarioUseCase)
+            DeleteUsuarioUseCase deleteUsuarioUseCase,
+            LoginUseCase loginUseCase)
         {
             _addUsuarioUseCase = addUsuarioUseCase;
             _getUsuarioUseCase = getUsuarioUseCase;
             _updateUsuarioUseCase = updateUsuarioUseCase;
             _deleteUsuarioUseCase = deleteUsuarioUseCase;
+            _loginUseCase = loginUseCase;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<UsuarioResponseDTO>>> GetUsuarios()
         {
             var usuarios = await _getUsuarioUseCase.ExecuteAsync();
@@ -45,6 +50,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> UpdateUsuario(int id, [FromBody] UpdateUsuarioDTO usuarioDTO)
         {
             if (!ModelState.IsValid)
@@ -66,6 +72,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteUsuario(int id)
         {
             try
@@ -77,6 +84,20 @@ namespace API.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+        
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginResponseDTO>> Login([FromBody] LoginDTO loginDTO)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var response = await _loginUseCase.ExecuteAsync(loginDTO);
+            
+            if (response == null)
+                return Unauthorized("Email o contraseña incorrectos");
+
+            return Ok(response);
         }
     }
 }
