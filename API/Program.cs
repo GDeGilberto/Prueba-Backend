@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
 // Configure Swagger/OpenAPI
@@ -21,10 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register Repositories
 builder.Services.AddScoped<IRepository<Usuario>, UsuarioRepository>();
-
-// Register Mappers and Presenters
 builder.Services.AddScoped<IMapper<AddUsuarioRequestDTO, Usuario>, AddUsuarioMapper>();
 builder.Services.AddScoped<IPresenter<Usuario, UsuarioResponseDTO>, UsuarioPresenter>();
 
